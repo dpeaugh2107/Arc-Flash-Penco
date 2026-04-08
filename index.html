@@ -9,6 +9,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script>
+  // Fail-safe preview mode: ensures guide renders even if main JS fails.
+  (function(){
+    try{
+      if(new URLSearchParams(window.location.search||'').get('preview')==='1'){
+        document.documentElement.classList.add('preview');
+      }
+    } catch(_e){}
+  })();
+</script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -188,8 +198,10 @@ text-align: center;
 .read-btn:hover { border-color: #C5A55A; }
 
 /* GUIDE */
-.guide { display: block; }
+.guide { display: none; }
 .guide.show { display: block; }
+.preview .guide { display: block; }
+.preview .gate-overlay { display: none; }
 .container { max-width: 960px; margin: 0 auto; padding: 0 28px; }
 
 /* HERO - belt, suspenders, and duct tape */
@@ -690,12 +702,11 @@ section.hero { padding: 52px 0 40px; }
     <div class="success-view" id="successView">
       <div class="success-icon">&#10003;</div>
       <h3>You're In.</h3>
-      <p>Your guide is ready. Tap below to read it now. You can also download the PDF.</p>
-      <button type="button" class="gate-btn" id="continueBtn">Read the Guide</button>
-      <a class="read-btn" href="/Arc-Flash-Penco/Penco-Arc-Flash-Guide.pdf" target="_blank" rel="noopener">
-        Download PDF
-      </a>
+      <p>Your guide is ready. Open it below. You can also print and save a PDF copy.</p>
+      <button type="button" class="gate-btn" id="continueBtn">Open the Guide</button>
+      <button type="button" class="read-btn" id="printBtn">Print / Save as PDF</button>
   </div>
+</div>
 </div>
 
 <div class="guide" id="guide">
@@ -865,7 +876,14 @@ section.hero { padding: 52px 0 40px; }
     if(guide) guide.classList.add('show');
     try{ window.scrollTo(0,0); } catch(_e){}
   }
+  function showGate(){
+    var gate=document.getElementById('gate');
+    var guide=document.getElementById('guide');
+    if(gate) gate.classList.remove('hide');
+    if(guide) guide.classList.remove('show');
+  }
   if(hasPreviewBypass()) showGuide();
+  else showGate();
 
   var blocked=['tempmail.com','throwaway.email','guerrillamail.com','guerrillamail.de','sharklasers.com','grr.la','guerrillamailblock.com','pokemail.net','spam4.me','binkmail.com','bobmail.info','chammy.info','devnullmail.com','letthemeatspam.com','mailinator.com','maildrop.cc','dispostable.com','yopmail.com','yopmail.fr','cool.fr.nf','jetable.fr.nf','nospam.ze.tc','nomail.xl.cx','mega.zik.dj','speed.1s.fr','courriel.fr.nf','moncourrier.fr.nf','trashmail.com','trashmail.me','trashmail.net','trashymail.com','mailnesia.com','mailcatch.com','tempail.com','tempr.email','temp-mail.org','temp-mail.io','fakeinbox.com','emailondeck.com','getnada.com','tmpmail.net','tmpmail.org','mohmal.com','discard.email','discardmail.com','discardmail.de','mailscrap.com','mailnull.com','spamgourmet.com','spamgourmet.net','mytrashmail.com','thankyou2010.com','greymail.com','mt2015.com','trashinbox.com','despammed.com','kurzepost.de','objectmail.com','proxymail.eu','rcpt.at','trash-mail.at','trashmail.at','trashmail.io','wegwerfmail.de','wegwerfmail.net','wegwerfmail.org','wh4f.org','mailzilla.com','spamfree24.org','fiifke.de','trashinbox.net','imstations.com','mobi.web.id','ezehe.com','trbvm.com','flurred.com','armyspy.com','cuvox.de','dayrep.com','einrot.com','fleckens.hu','gustr.com','jourrapide.com','rhyta.com','superrito.com','teleworm.us','10minutemail.com','20minutemail.com','mailnator.com','anonbox.net','bugmenot.com','bumpymail.com','deadaddress.com','despam.it','dontreg.com','e4ward.com','fakemailgenerator.com','imgof.com','incognitomail.org','kasmail.com','mailexpire.com','mailforspam.com','mailmoat.com','mailsac.com','meltmail.com','mintemail.com','nobulk.com','noclickemail.com','nogmailspam.info','notsomuch.com','ownmail.net','spamavert.com','spambox.us','spamcero.com','spamex.com','spamherelots.com','spaml.com','uggsrock.com','veryrealmail.com','yourspamgoesto.space','harakirimail.com','33mail.com','inboxbear.com','tmail.ws','mailseal.de'];
   var nameRe=/^[A-Za-z\u00C0-\u024F\u1E00-\u1EFF' \-]{2,}$/;
@@ -929,12 +947,45 @@ section.hero { padding: 52px 0 40px; }
     };
     xhr.send(new FormData(form));
   });
+
   var continueBtn=document.getElementById('continueBtn');
   if(continueBtn) continueBtn.addEventListener('click',function(){
     try{ window.localStorage.setItem(BYPASS_KEY,'1'); } catch(_e){}
     showGuide();
   });
+  var printBtn=document.getElementById('printBtn');
+  if(printBtn) printBtn.addEventListener('click',function(){
+    try{ window.localStorage.setItem(BYPASS_KEY,'1'); } catch(_e){}
+    showGuide();
+    window.setTimeout(function(){
+      try{ window.print(); } catch(_e){}
+    }, 250);
+  });
 })();
+</script>
+
+<script>
+  // Last-resort rendering fail-safe: never allow a blank page.
+  (function(){
+    function isHidden(el){
+      if(!el) return true;
+      var cs=window.getComputedStyle ? window.getComputedStyle(el) : null;
+      if(!cs) return false;
+      return cs.display==='none' || cs.visibility==='hidden' || cs.opacity==='0';
+    }
+    function fix(){
+      try{
+        var gate=document.getElementById('gate');
+        var guide=document.getElementById('guide');
+        if(isHidden(gate) && isHidden(guide)){
+          if(gate) gate.classList.remove('hide');
+          if(guide) guide.classList.add('show');
+        }
+      } catch(_e){}
+    }
+    if(document.readyState==='complete') fix();
+    else window.addEventListener('load',fix);
+  })();
 </script>
 
 </body>
