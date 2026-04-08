@@ -25,7 +25,7 @@ body {
 position: fixed;
 top: 0; left: 0; right: 0; bottom: 0;
 z-index: 1000;
-background-color: #1B3A2D;
+background-color: #24533D;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -74,6 +74,7 @@ display: flex;
 gap: 12px;
 margin-bottom: 14px;
 }
+.form-row.single { max-width: 460px; }
 .form-field {
 flex: 1;
 display: flex;
@@ -112,7 +113,7 @@ min-height: 15px;
 .gate-btn {
 width: 100%;
 padding: 13px;
-background-color: #1B3A2D;
+background-color: #24533D;
 color: #ffffff;
 border: none;
 border-radius: 8px;
@@ -158,7 +159,7 @@ margin-bottom: 4px;
 display: block;
 margin-top: 18px;
 padding: 13px 30px;
-background-color: #1B3A2D;
+background-color: #24533D;
 color: #ffffff;
 border: none;
 border-radius: 8px;
@@ -193,9 +194,32 @@ text-align: center;
 
 /* HERO - belt, suspenders, and duct tape */
 section.hero {
-background-color: #1B3A2D !important;
+background-color: #24533D !important;
 padding: 72px 0 56px;
 position: relative;
+}
+.hero .container { height: 100%; }
+.hero-inner { position: relative; }
+.hero-inner{
+min-height: 640px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+.hero-sub{ margin-bottom: 28px; }
+.stats-bar{ margin-top: auto; }
+.hero-logo-wrap{
+display: inline-block;
+background: #ffffff;
+border: 2px solid rgba(255,255,255,0.95);
+border-radius: 10px;
+padding: 10px 12px;
+margin-bottom: 22px;
+}
+.hero-logo{
+display: block;
+height: 52px;
+width: auto;
 }
 section.hero::after {
 content: ‘’;
@@ -210,14 +234,14 @@ font-weight: 600;
 letter-spacing: 2px;
 color: #C5A55A;
 text-transform: uppercase;
-margin-bottom: 22px;
+margin-bottom: 16px;
 }
 .hero h1 {
 font-family: ‘DM Serif Display’, serif;
 font-size: clamp(30px, 5vw, 46px);
 color: #ffffff !important;
 line-height: 1.15;
-margin-bottom: 18px;
+margin-bottom: 22px;
 }
 .hero-sub {
 font-size: 16px;
@@ -231,7 +255,7 @@ display: grid;
 grid-template-columns: repeat(4, 1fr);
 gap: 20px;
 border-top: 1px solid rgba(197,165,90,0.3);
-padding-top: 32px;
+padding-top: 44px;
 }
 .stat-item { text-align: center; }
 .stat-num {
@@ -301,7 +325,7 @@ color: #3A3A3A;
 line-height: 1.55;
 }
 .key-banner {
-background-color: #1B3A2D;
+background-color: #24533D;
 border-radius: 8px;
 padding: 22px 28px;
 text-align: center;
@@ -349,7 +373,7 @@ color: #3A3A3A;
 line-height: 1.6;
 }
 .banner-dark {
-background-color: #1B3A2D;
+background-color: #24533D;
 border-radius: 8px;
 padding: 24px 28px;
 text-align: center;
@@ -389,7 +413,7 @@ border-radius: 4px;
 font-size: 11px;
 font-weight: 700;
 color: #ffffff;
-background-color: #1B3A2D;
+background-color: #24533D;
 letter-spacing: 0.5px;
 white-space: nowrap;
 position: relative;
@@ -452,7 +476,7 @@ color: #8B2020;
 font-weight: 700;
 }
 .bottom-callout {
-background-color: #1B3A2D;
+background-color: #24533D;
 border-radius: 8px;
 padding: 26px 30px;
 text-align: center;
@@ -476,7 +500,7 @@ margin: 0 auto;
 
 /* WHY PENCO */
 .why-penco {
-background-color: #1B3A2D !important;
+background-color: #24533D !important;
 padding: 56px 0;
 position: relative;
 }
@@ -591,6 +615,8 @@ background-color: #FAFAF8;
 .form-row { flex-direction: column; }
 .gate-card { padding: 30px 22px; }
 section.hero { padding: 52px 0 40px; }
+.hero-inner{ min-height: 0; display: block; }
+.stats-bar{ margin-top: 0; }
 .section { padding: 40px 0; }
 .tl-left { width: 80px; min-width: 80px; }
 .tl-pill { font-size: 10px; padding: 4px 8px; }
@@ -619,10 +645,28 @@ section.hero { padding: 52px 0 40px; }
             <input type="text" id="firstName" name="firstName" required autocomplete="given-name">
             <div class="form-err" id="fnErr"></div>
           </div>
+        </div>
+        <div class="form-row">
           <div class="form-field">
             <label for="lastName">Last Name</label>
             <input type="text" id="lastName" name="lastName" required autocomplete="family-name">
             <div class="form-err" id="lnErr"></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="phone">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              required
+              inputmode="tel"
+              autocomplete="tel"
+              placeholder="(404) 555-1234"
+              pattern="^(?:\+?1[\s.\-]?)?(?:\(\s*\d{3}\s*\)|\d{3})[\s.\-]?\d{3}[\s.\-]?\d{4}$"
+            >
+            <div class="form-err" id="phErr"></div>
           </div>
         </div>
         <div class="form-row">
@@ -659,16 +703,25 @@ section.hero { padding: 52px 0 40px; }
 
   <!-- HERO: inline style is the nuclear option - nothing can override this -->
 
-  <section class="hero" style="background-color: #1B3A2D; color: #ffffff;">
+  <section class="hero" style="background-color: #24533D; color: #ffffff;">
     <div class="container">
-      <div class="hero-badge" style="color: #C5A55A;">NFPA 70B / 70E Compliance Resource</div>
-      <h1 style="font-family: 'DM Serif Display', serif; color: #ffffff;">Arc Flash Hazards Are Costing Businesses More Than They Know.</h1>
-      <p class="hero-sub" style="color: #B0B8A8;">A plain-language guide to arc flash risk, liability exposure, and why most facilities are less protected than they think.</p>
-      <div class="stats-bar">
-        <div class="stat-item"><div class="stat-num" style="color: #C5A55A;">30,000</div><div class="stat-label">Arc Flash Incidents / Year</div></div>
-        <div class="stat-item"><div class="stat-num" style="color: #C5A55A;">7,000</div><div class="stat-label">Burn Injuries Annually</div></div>
-        <div class="stat-item"><div class="stat-num" style="color: #C5A55A;">400+</div><div class="stat-label">Electrical Fatalities / Year</div></div>
-        <div class="stat-item"><div class="stat-num" style="color: #C5A55A;">$15M+</div><div class="stat-label">Avg. Incident Liability</div></div>
+      <div class="hero-inner">
+        <div class="hero-badge" style="color: #C5A55A;">NFPA 70B / 70E Compliance Resource</div>
+        <div class="hero-logo-wrap" aria-label="Penco Electrical Testing Services">
+          <img
+            class="hero-logo"
+            src="assets/c__Users_dpeaugh_AppData_Roaming_Cursor_User_workspaceStorage_b25a350fc3fc75ef54576b1b48c1d659_images_New_Image-6a984881-b11a-443c-94f4-8c8d59a8407d.png"
+            alt="Penco Electrical Testing Services logo"
+          >
+        </div>
+        <h1 style="font-family: 'DM Serif Display', serif; color: #ffffff;">Arc Flash Hazards Are Costing Businesses More Than They Know.</h1>
+        <p class="hero-sub" style="color: #B0B8A8;">A plain-language guide to arc flash risk, liability exposure, and why most facilities are less protected than they think.</p>
+        <div class="stats-bar">
+          <div class="stat-item"><div class="stat-num" style="color: #C5A55A;">30,000</div><div class="stat-label">Arc Flash Incidents / Year</div></div>
+          <div class="stat-item"><div class="stat-num" style="color: #C5A55A;">7,000</div><div class="stat-label">Burn Injuries Annually</div></div>
+          <div class="stat-item"><div class="stat-num" style="color: #C5A55A;">400+</div><div class="stat-label">Electrical Fatalities / Year</div></div>
+          <div class="stat-item"><div class="stat-num" style="color: #C5A55A;">$15M+</div><div class="stat-label">Avg. Incident Liability</div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -759,12 +812,12 @@ section.hero { padding: 52px 0 40px; }
 
   <!-- WHY PENCO: inline style backup -->
 
-  <section class="why-penco" style="background-color: #1B3A2D;">
+  <section class="why-penco" style="background-color: #24533D;">
     <div class="container">
       <div class="why-badge">Why Penco</div>
       <h2>One Qualified Team.</h2>
       <h3>Detect, Document, and Remediate Under One Roof.</h3>
-      <p class="why-intro">Most inspection vendors hand you a report and walk away. Penco performs the scan and completes the repair. One vendor, one timeline, one chain of accountability from inspection to closeout. No third-party handoff. No gap between finding and fix.</p>
+      <p class="why-intro">Most inspection vendors hand you a report and walk away. Penco performs energized/de-energized testing and completes the repair. One vendor, one timeline, one chain of accountability from inspection to closeout. No third-party handoff. No gap between finding and fix.</p>
       <div class="svc-grid">
         <div class="svc-item"><div class="svc-check">&#10003;</div><div><h4>IR Thermography</h4><p>NFPA 70B-aligned scans with full delta-T documentation and condition classification.</p></div></div>
         <div class="svc-item"><div class="svc-check">&#10003;</div><div><h4>Ultrasonic Inspection</h4><p>Partial discharge and corona detection inside switchgear and transformers before heat signatures appear.</p></div></div>
@@ -803,8 +856,10 @@ section.hero { padding: 52px 0 40px; }
   var form=document.getElementById('gateForm');
   var fn=document.getElementById('firstName');
   var ln=document.getElementById('lastName');
+  var ph=document.getElementById('phone');
   var em=document.getElementById('email');
   var btn=document.getElementById('subBtn');
+  function onlyDigits(s){ return (s||'').replace(/\D/g,''); }
   function clearErr(){
     var e=document.querySelectorAll('.form-err');
     for(var i=0;i<e.length;i++) e[i].textContent='';
@@ -821,9 +876,13 @@ section.hero { padding: 52px 0 40px; }
     var ok=true;
     var fv=fn.value.trim();
     var lv=ln.value.trim();
+    var pv=ph.value.trim();
     var ev=em.value.trim();
     if(!fv||!nameRe.test(fv)){setErr(fn,'fnErr','Enter a valid first name.');ok=false;}
     if(!lv||!nameRe.test(lv)){setErr(ln,'lnErr','Enter a valid last name.');ok=false;}
+    var pd=onlyDigits(pv);
+    if(pd.length!==10){setErr(ph,'phErr','Enter a valid 10-digit phone number.');ok=false;}
+    else if(/^(\d)\1{9}$/.test(pd)){setErr(ph,'phErr','Enter a valid 10-digit phone number.');ok=false;}
     if(!ev||ev.indexOf('@')<1){setErr(em,'emErr','Enter a valid email address.');ok=false;}
     else{
       var d=ev.split('@')[1].toLowerCase();
